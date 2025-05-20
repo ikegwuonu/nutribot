@@ -1,30 +1,75 @@
 "use client";
-
-import { Checkbox } from "@/components/ui/checkbox";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ArrowRight, ChevronLeft, Apple, Carrot, Utensils } from "lucide-react";
+import { useState, useTransition } from "react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/navbar";
 import One from "./One";
 import Three from "./Three";
-
+import Two from "./Two";
+import { createMealPlan } from "@/lib/actions";
+import { handleApiError } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+interface SelectionState {
+  foods: string[];
+  fruits: string[];
+  vegetables: string[];
+}
+type PreferenceState = {
+  disease: string[];
+  diet: string[];
+};
+const diets = {
+  Hypertension: "DASH ",
+  Diabetes: "DASH",
+  Gout: "low Purine",
+  Artheroslerosis: "low Cholesterol",
+};
 export default function MealPlanner() {
+  const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [selectedFoods, setSelectedFoods] = useState<Record<string, boolean>>(
-    {}
-  );
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const [preference, setPreference] = useState<PreferenceState>({
+    diet: [],
+    disease: [],
+  });
+  const [selectedFoods, setSelectedFoods] = useState<SelectionState>({
+    foods: [],
+    fruits: [],
+    vegetables: [],
+  });
+  const onSubmit = async () => {
+    const dietArray = preference.disease.map(
+      (disease) => diets[disease as keyof typeof diets]
+    );
+
+    const instructions = `fruits:${selectedFoods.fruits.join(
+      ","
+    )}, foods:${selectedFoods.foods.join(
+      ","
+    )}, vegetables:${selectedFoods.vegetables.join(
+      ","
+    )} for a patient with ${preference.disease.join(
+      ","
+    )} having a ${preference.diet.join(
+      ","
+    )} diet. Meals should follow ${dietArray.join(",")} diet`;
+
+    startTransition(async () => {
+      try {
+        const response = await createMealPlan(instructions); // calls server action
+        if (!response.ok) {
+          throw new Error("Failed to generate meal plan");
+        }
+
+        const data = await response.json();
+        const mealPlan = data.mealPlan;
+        // router.push(`/result?mealPlan=${encodeURIComponent(mealPlan)}`);
+      } catch (error) {
+        handleApiError(error);
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white">
@@ -60,75 +105,13 @@ export default function MealPlanner() {
           )}
 
           {step === 2 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Step 2: Meal Plan Preferences</CardTitle>
-                <CardDescription>
-                  Customize your meal plan settings.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="grid gap-2">
-                    <Label htmlFor="days">Number of Days</Label>
-                    <Input
-                      id="days"
-                      type="number"
-                      defaultValue="7"
-                      min="1"
-                      max="14"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label htmlFor="meals-per-day">Meals Per Day</Label>
-                    <Input
-                      id="meals-per-day"
-                      type="number"
-                      defaultValue="3"
-                      min="1"
-                      max="6"
-                    />
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label>Dietary Preferences</Label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="vegetarian" />
-                        <Label htmlFor="vegetarian">Vegetarian</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="low-carb" />
-                        <Label htmlFor="low-carb">Low Carb</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="high-protein" />
-                        <Label htmlFor="high-protein">High Protein</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="gluten-free" />
-                        <Label htmlFor="gluten-free">Gluten Free</Label>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button variant="outline" onClick={() => setStep(1)}>
-                      <ChevronLeft className="mr-2 h-4 w-4" />
-                      Back
-                    </Button>
-                    <Button
-                      className="bg-green-600 hover:bg-green-700"
-                      onClick={() => setStep(3)}
-                    >
-                      Generate Meal Plan
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <Two
+              submitFn={onSubmit}
+              preference={preference}
+              setPreference={setPreference}
+              setStep={setStep}
+              isLoading={isPending}
+            />
           )}
 
           {step === 3 && <Three setStep={setStep} />}

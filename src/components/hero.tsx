@@ -57,7 +57,7 @@ export default function Hero({
             <div className="absolute -z-10 inset-0 bg-gradient-to-tr from-green-500/10 to-red-500/10 rounded-3xl blur-sm"></div>
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
               <Image
-                src="/placeholder.svg?height=400&width=500"
+                src="/1.png"
                 alt="Nigerian cuisine"
                 width={500}
                 height={400}

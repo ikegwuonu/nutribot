@@ -22,8 +22,17 @@ const foodItems = [
   "Pounded Yam",
   "Eba",
   "Fufu",
-  "Jollof Rice",
-  "Fried Rice",
+
+  "Potato",
+  "Noodles",
+  "Spaghetti",
+  "Macaroni",
+  "Groundnut",
+  "millet",
+  "Oatmeal",
+  "Cereal",
+  "pap",
+  "Akara",
 ];
 
 const fruits = [
@@ -53,20 +62,38 @@ const vegetables = [
   "Onions",
   "Garden Egg",
 ];
+type SelectionState = {
+  foods: string[];
+  fruits: string[];
+  vegetables: string[];
+};
+
 interface OneProps {
-  selectedFoods: Record<string, boolean>;
-  setSelectedFoods: Dispatch<SetStateAction<Record<string, boolean>>>;
+  selectedFoods: SelectionState;
+  setSelectedFoods: Dispatch<SetStateAction<SelectionState>>;
   setStep: Dispatch<SetStateAction<number>>;
 }
+
 const One = ({ selectedFoods, setSelectedFoods, setStep }: OneProps) => {
-  console.log("Selected Foods:", selectedFoods);
+  const toggleItem = (current: string[], item: string): string[] =>
+    current.includes(item)
+      ? current.filter((i) => i !== item)
+      : [...current, item];
+  const totalSelected =
+    selectedFoods.foods.length +
+    selectedFoods.fruits.length +
+    selectedFoods.vegetables.length;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Step 1: Select Your Food Preferences</CardTitle>
         <CardDescription>
-          Choose the Nigerian foods, fruits, and vegetables you enjoy.
+          Choose the Nigerian foods, fruits, and vegetables available to you.
         </CardDescription>
+        <p className="text-gray-700 text-xs">
+          At least 5 from foods and 3 from fruits and vegetables
+        </p>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="food-items">
@@ -95,11 +122,11 @@ const One = ({ selectedFoods, setSelectedFoods, setStep }: OneProps) => {
                     id={id}
                     name={item}
                     type="food"
-                    checked={!!selectedFoods[`food-${id}`]}
-                    onCheckedChange={(checked) => {
+                    checked={selectedFoods.foods.includes(item)}
+                    onCheckedChange={() => {
                       setSelectedFoods((prev) => ({
                         ...prev,
-                        [`food-${id}`]: checked,
+                        foods: toggleItem(prev.foods, item),
                       }));
                     }}
                   />
@@ -118,11 +145,11 @@ const One = ({ selectedFoods, setSelectedFoods, setStep }: OneProps) => {
                     id={id}
                     name={item}
                     type="fruit"
-                    checked={!!selectedFoods[`fruit-${id}`]}
-                    onCheckedChange={(checked) => {
+                    checked={selectedFoods.fruits.includes(item)}
+                    onCheckedChange={() => {
                       setSelectedFoods((prev) => ({
                         ...prev,
-                        [`fruit-${id}`]: checked,
+                        fruits: toggleItem(prev.fruits, item),
                       }));
                     }}
                   />
@@ -141,11 +168,11 @@ const One = ({ selectedFoods, setSelectedFoods, setStep }: OneProps) => {
                     id={id}
                     name={item}
                     type="vegetable"
-                    checked={!!selectedFoods[`vegetable-${id}`]}
-                    onCheckedChange={(checked) => {
+                    checked={selectedFoods.vegetables.includes(item)}
+                    onCheckedChange={() => {
                       setSelectedFoods((prev) => ({
                         ...prev,
-                        [`vegetable-${id}`]: checked,
+                        vegetables: toggleItem(prev.vegetables, item),
                       }));
                     }}
                   />
@@ -158,11 +185,7 @@ const One = ({ selectedFoods, setSelectedFoods, setStep }: OneProps) => {
         <div className="mt-8">
           {/* For debugging - you can remove this in production */}
           <div className="mb-4 text-sm text-muted-foreground">
-            Selected items:{" "}
-            {
-              Object.entries(selectedFoods).filter(([_, selected]) => selected)
-                .length
-            }
+            Selected items: {totalSelected}
           </div>
           <Button
             className="bg-green-600 hover:bg-green-700 w-full sm:w-auto"
