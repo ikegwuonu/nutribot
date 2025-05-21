@@ -9,6 +9,8 @@ import Two from "./Two";
 import { createMealPlan } from "@/lib/actions";
 import { handleApiError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Plan } from "@/lib/types";
+import { usePlanStore } from "@/zustand/planStore";
 interface SelectionState {
   foods: string[];
   fruits: string[];
@@ -25,6 +27,7 @@ const diets = {
   Artheroslerosis: "low Cholesterol",
 };
 export default function MealPlanner() {
+  const { setMealPlan } = usePlanStore();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [isPending, startTransition] = useTransition();
@@ -43,7 +46,7 @@ export default function MealPlanner() {
       (disease) => diets[disease as keyof typeof diets]
     );
 
-    const instructions = `fruits:${selectedFoods.fruits.join(
+    const instruction = `fruits:${selectedFoods.fruits.join(
       ","
     )}, foods:${selectedFoods.foods.join(
       ","
@@ -55,20 +58,34 @@ export default function MealPlanner() {
       ","
     )} diet. Meals should follow ${dietArray.join(",")} diet`;
 
-    startTransition(async () => {
-      try {
-        const response = await createMealPlan(instructions); // calls server action
-        if (!response.ok) {
-          throw new Error("Failed to generate meal plan");
-        }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ instruction }),
+      });
 
-        const data = await response.json();
-        const mealPlan = data.mealPlan;
-        // router.push(`/result?mealPlan=${encodeURIComponent(mealPlan)}`);
-      } catch (error) {
-        handleApiError(error);
-      }
-    });
+      const data = await res.json();
+
+      const cleanJson = data
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+      const mealPlan: Plan[] = JSON.parse(cleanJson);
+
+      console.log(mealPlan);
+
+      setMealPlan(mealPlan); // set it in zustand or wherever
+      router.push("/plan"); // navigate
+    } catch (err) {
+      console.error(err);
+      handleApiError(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -110,7 +127,7 @@ export default function MealPlanner() {
               preference={preference}
               setPreference={setPreference}
               setStep={setStep}
-              isLoading={isPending}
+              isLoading={loading}
             />
           )}
 

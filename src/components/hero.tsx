@@ -24,11 +24,11 @@ export default function Hero({
 }: HeroProps) {
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-white to-red-500/20 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-slate-100 to-red-500/20 z-0"></div>
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-gradient-to-br from-yellow-500/20 to-green-500/20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-gradient-to-tr from-red-500/20 to-green-500/20 rounded-full blur-3xl"></div>
 
-      <div className="container relative z-10 py-20 md:py-32">
+      <div className="container relative z-10 py-12 md:py-2">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
@@ -54,14 +54,14 @@ export default function Hero({
             </div>
           </div>
           <div className="relative">
-            <div className="absolute -z-10 inset-0 bg-gradient-to-tr from-green-500/10 to-red-500/10 rounded-3xl blur-sm"></div>
-            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-xl">
+            <div className="absolute -z-10 inset-0 "></div>
+            <div className="">
               <Image
                 src="/1.png"
                 alt="Nigerian cuisine"
                 width={500}
                 height={400}
-                className="rounded-2xl w-full h-auto object-cover"
+                className="rounded-2xl w-full h-auto object-cover a"
               />
               {showFoodCategories && (
                 <div className="mt-6 grid grid-cols-3 gap-4">

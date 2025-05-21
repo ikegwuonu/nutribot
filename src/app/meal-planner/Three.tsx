@@ -74,45 +74,47 @@ interface ThreeProps {
 }
 const Three = ({ setStep }: ThreeProps) => {
   return (
-    <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Your Nigerian Meal Plan</CardTitle>
-          <CardDescription>
-            Here's your personalized 7-day Nigerian meal plan based on your
-            preferences.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-6">
-            {mealPlanData.map((dayPlan) => (
-              <MealPlanDay
-                key={dayPlan.day}
-                day={dayPlan.day}
-                meals={dayPlan.meals}
-              />
-            ))}
-          </div>
+    <div className="space-y-8 container py-12">
+      <main className="max-w-4xl mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Nigerian Meal Plan</CardTitle>
+            <CardDescription>
+              Here's your personalized 7-day Nigerian meal plan based on your
+              preferences.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              {mealPlanData.map((dayPlan) => (
+                <MealPlanDay
+                  key={dayPlan.day}
+                  day={dayPlan.day}
+                  meals={dayPlan.meals}
+                />
+              ))}
+            </div>
 
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <Button variant="outline" onClick={() => setStep(2)}>
-              <ChevronLeft className="mr-2 h-4 w-4" />
-              Back to Preferences
-            </Button>
-            <Button className="bg-green-600 hover:bg-green-700">
-              View Detailed Recipes
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <Button variant="outline" onClick={() => setStep(2)}>
+                <ChevronLeft className="mr-2 h-4 w-4" />
+                Back to Preferences
+              </Button>
+              <Button className="bg-green-600 hover:bg-green-700">
+                View Detailed Recipes
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-      <DetailedRecipe
-        title={jollofRiceRecipe.title}
-        prepTime={jollofRiceRecipe.prepTime}
-        ingredients={jollofRiceRecipe.ingredients}
-        instructions={jollofRiceRecipe.instructions}
-        nutritionInfo={jollofRiceRecipe.nutritionInfo}
-      />
+        <DetailedRecipe
+          title={jollofRiceRecipe.title}
+          prepTime={jollofRiceRecipe.prepTime}
+          ingredients={jollofRiceRecipe.ingredients}
+          instructions={jollofRiceRecipe.instructions}
+          nutritionInfo={jollofRiceRecipe.nutritionInfo}
+        />
+      </main>
     </div>
   );
 };
