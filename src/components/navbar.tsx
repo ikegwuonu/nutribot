@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/theme-toggle";
+import DownladButton from "./downlad-button";
 
 interface NavbarProps {
   showFullNav?: boolean;
@@ -55,8 +56,13 @@ export default function Navbar({ showFullNav = true }: NavbarProps) {
             </div>
           </>
         )}
-
-        {!showFullNav && <ThemeToggle />}
+        {!showFullNav && (
+          <div className="gap-x-2 flex items-center">
+            {" "}
+            <DownladButton />
+            <ThemeToggle />
+          </div>
+        )}
       </div>
     </header>
   );

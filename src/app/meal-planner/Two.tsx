@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, ChevronLeft, Loader } from "lucide-react";
+import { ArrowRight, ChevronLeft } from "lucide-react";
 
 type PreferenceState = {
   disease: string[];

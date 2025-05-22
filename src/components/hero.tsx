@@ -57,7 +57,7 @@ export default function Hero({
             <div className="absolute -z-10 inset-0 "></div>
             <div className="">
               <Image
-                src="/1.png"
+                src="/2.png"
                 alt="Nigerian cuisine"
                 width={500}
                 height={400}

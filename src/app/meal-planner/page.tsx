@@ -1,12 +1,10 @@
 "use client";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/components/navbar";
 import One from "./One";
-import Three from "./Three";
 import Two from "./Two";
-import { createMealPlan } from "@/lib/actions";
 import { handleApiError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Plan } from "@/lib/types";
@@ -30,7 +28,6 @@ export default function MealPlanner() {
   const { setMealPlan } = usePlanStore();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
-  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const [preference, setPreference] = useState<PreferenceState>({
     diet: [],
@@ -130,8 +127,6 @@ export default function MealPlanner() {
               isLoading={loading}
             />
           )}
-
-          {step === 3 && <Three setStep={setStep} />}
         </div>
       </main>
     </div>
