@@ -75,8 +75,8 @@ export default function MealPlanner() {
 
       console.log(mealPlan);
 
-      setMealPlan(mealPlan); // set it in zustand or wherever
-      router.push("/plan"); // navigate
+      setMealPlan(mealPlan);
+      router.push("/plan");
     } catch (err) {
       console.error(err);
       handleApiError(err);
