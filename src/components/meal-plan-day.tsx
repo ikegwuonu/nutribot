@@ -4,7 +4,7 @@ import RecipeCard from "@/components/recipe-card";
 interface Meal {
   title: string;
   prepTime: number;
-  type: "breakfast" | "lunch" | "dinner" | "snack";
+  type: "breakfast" | "lunch" | "dinner";
 }
 
 interface MealPlanDayProps {
@@ -25,6 +25,7 @@ export default function MealPlanDay({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {meals.map((meal, index) => (
             <RecipeCard
+              day={day}
               key={index}
               title={meal.title}
               prepTime={meal.prepTime}

@@ -55,29 +55,91 @@ export const getInitials = (firstName: string, lastName: string): string => {
   return (firstName[0] + lastName[0]).toUpperCase();
 };
 
-//  // Function to render star rating
-//  const renderRating = (rating: number, book: any) => {
-//   const fullStars = Math.floor(rating);
-//   const hasHalfStar = rating % 1 >= 0.5;
+// Calculate BMI
+export const calculateBMI = ({
+  height,
+  weight,
+}: {
+  height: string;
+  weight: string;
+}): { category: string; bmi: number } => {
+  //if (!height || !weight) return;
 
-//   return (
-//     <div className="flex items-center">
-//       <div className="flex mr-1">
-//         {[...Array(5)].map((_, i) => (
-//           <Star
-//             key={i}
-//             className={`h-4 w-4 ${
-//               i < fullStars
-//                 ? "text-yellow-500 fill-yellow-500"
-//                 : i === fullStars && hasHalfStar
-//                   ? "text-yellow-500 fill-yellow-500"
-//                   : "text-gray-300"
-//             }`}
-//           />
-//         ))}
-//       </div>
-//       <span className="text-sm text-gray-600">{rating.toFixed(1)}</span>
-//       <span className="text-xs text-gray-500 ml-1">({book.reviews})</span>
-//     </div>
-//   );
-// };
+  const heightInMeters = Number.parseFloat(height) / 100;
+  const weightInKg = Number.parseFloat(weight);
+
+  if (
+    isNaN(heightInMeters) ||
+    isNaN(weightInKg) ||
+    heightInMeters <= 0 ||
+    weightInKg <= 0
+  ) {
+    // return;
+  }
+
+  const bmi = weightInKg / (heightInMeters * heightInMeters);
+  let category = "";
+
+  if (bmi < 18.5) {
+    category = "Underweight";
+  } else if (bmi >= 18.5 && bmi < 25) {
+    category = "Normal weight";
+  } else if (bmi >= 25 && bmi < 30) {
+    category = "Overweight";
+  } else {
+    category = "Obesity";
+  }
+  return { category, bmi: Number.parseFloat(bmi.toFixed(1)) };
+};
+// Calculate Calorie Needs
+export const calculateCalories = ({
+  age,
+  gender,
+  activityLevel,
+  weight,
+  height,
+}: {
+  age: string;
+  gender: string;
+  activityLevel: string;
+  weight: string;
+  height: string;
+}): number | null => {
+  if (!age || !gender || !activityLevel) return null;
+
+  const ageValue = Number.parseFloat(age);
+
+  if (isNaN(ageValue) || ageValue <= 0) {
+    return null;
+  }
+
+  // Base Metabolic Rate (BMR) using Mifflin-St Jeor Equation
+  let bmr = 0;
+  if (gender === "male") {
+    bmr =
+      10 * Number.parseFloat(weight) +
+      6.25 * Number.parseFloat(height) -
+      5 * ageValue +
+      5;
+  } else {
+    bmr =
+      10 * Number.parseFloat(weight) +
+      6.25 * Number.parseFloat(height) -
+      5 * ageValue -
+      161;
+  }
+
+  // Activity multipliers
+  const activityMultipliers = {
+    sedentary: 1.2, // Little or no exercise
+    light: 1.375, // Light exercise 1-3 days/week
+    moderate: 1.55, // Moderate exercise 3-5 days/week
+    active: 1.725, // Hard exercise 6-7 days/week
+    veryActive: 1.9, // Very hard exercise & physical job or 2x training
+  };
+
+  const calories = Math.round(
+    bmr * activityMultipliers[activityLevel as keyof typeof activityMultipliers]
+  );
+  return calories;
+};

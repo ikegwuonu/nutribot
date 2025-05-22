@@ -16,27 +16,47 @@ interface NutritionInfo {
 
 interface RecipeProps {
   title: string;
+  type: "breakfast" | "lunch" | "dinner";
   prepTime: number;
   ingredients: string[];
   instructions: string[];
   nutritionInfo?: NutritionInfo;
+  detail?: boolean;
 }
 
 export default function DetailedRecipe({
+  type,
   title,
   prepTime,
   ingredients,
   instructions,
   nutritionInfo,
+  detail,
 }: RecipeProps) {
+  console.log(instructions);
+  const combined = instructions.join(" ");
+  const splitSentences = combined
+    .split(".")
+    .map((sentence) => sentence.trim()) // remove whitespace
+    .filter((sentence) => sentence.length); // remove empty strings
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Featured Recipe</CardTitle>
-        <CardDescription>
-          Detailed recipe for one of your meal plan items.
-        </CardDescription>
-      </CardHeader>
+    <Card id={type}>
+      {detail ? (
+        <CardHeader>
+          <CardTitle>
+            <span className="uppercase">{type[0]}</span>
+            <span>{type.slice(1)}</span>
+          </CardTitle>
+        </CardHeader>
+      ) : (
+        <CardHeader>
+          <CardTitle>Feautured</CardTitle>
+          <CardDescription>
+            Detailed recipe for one of your meals.
+          </CardDescription>
+        </CardHeader>
+      )}
       <CardContent>
         <div className="space-y-6">
           <div>
@@ -59,7 +79,7 @@ export default function DetailedRecipe({
           <div>
             <h4 className="font-bold mb-2">Instructions</h4>
             <ol className="list-decimal pl-5 space-y-2">
-              {instructions.map((instruction, index) => (
+              {splitSentences.map((instruction, index) => (
                 <li key={index}>{instruction}</li>
               ))}
             </ol>

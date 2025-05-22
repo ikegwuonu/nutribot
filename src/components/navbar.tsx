@@ -26,22 +26,22 @@ export default function Navbar({ showFullNav = true }: NavbarProps) {
                 Home
               </Link>
               <Link
-                href="#features"
+                href="/plan"
                 className="text-sm font-medium hover:text-green-600 transition-colors"
               >
-                Features
+                Plan
               </Link>
               <Link
                 href="#how-it-works"
                 className="text-sm font-medium hover:text-green-600 transition-colors"
               >
-                How It Works
+                Recipes
               </Link>
               <Link
-                href="#about"
+                href="/#calculator"
                 className="text-sm font-medium hover:text-green-600 transition-colors"
               >
-                About
+                Calculator
               </Link>
             </nav>
             <div className="flex items-center gap-4">

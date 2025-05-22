@@ -28,13 +28,13 @@ export default function Hero({
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-gradient-to-br from-yellow-500/20 to-green-500/20 rounded-full blur-3xl"></div>
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-gradient-to-tr from-red-500/20 to-green-500/20 rounded-full blur-3xl"></div>
 
-      <div className="container relative z-10 py-12 md:py-2">
+      <div className="container relative z-10 py-12 md:py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+          <div className="">
+            <p className="text-2xl md:text-3xl pb-3 lg:text-5xl font-bold leading-tight">
               {title}
-            </h1>
-            <p className="text-lg text-muted-foreground">{description}</p>
+            </p>
+            <p className="text-lg text-muted-foreground py-5">{description}</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
@@ -64,7 +64,7 @@ export default function Hero({
                 className="rounded-2xl w-full h-auto object-cover a"
               />
               {showFoodCategories && (
-                <div className="mt-6 grid grid-cols-3 gap-4">
+                <div className="mt-3 grid grid-cols-3 gap-4">
                   <div className="bg-green-50 p-3 rounded-xl flex flex-col items-center">
                     <Utensils className="h-6 w-6 text-green-600 mb-2" />
                     <span className="text-sm font-medium">Food Items</span>

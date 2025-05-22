@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import Hero from "@/components/hero";
 import FeatureCard from "@/components/feature-card";
 import Footer from "@/components/footer";
+import HealthCalculator from "@/components/health-calculator";
 
 export default function Home() {
   return (
@@ -25,7 +26,10 @@ export default function Home() {
         {/* Features Section */}
         <section id="features" className="py-20 bg-white">
           <div className="container">
-            <div className="text-center mb-16">
+            <div className="max-w-3xl mx-auto">
+              <HealthCalculator />
+            </div>
+            <div className="text-center my-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Why Choose NutriBot?
               </h2>

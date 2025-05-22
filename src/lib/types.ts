@@ -1,7 +1,7 @@
 export interface SquareMeal {
   title: string;
   prepTime: number;
-  type: "lunch" | "brakfast" | "dinner";
+  type: "lunch" | "breakfast" | "dinner";
   ingredients: string[];
   instructions: string[];
   nutritionInfo: {
