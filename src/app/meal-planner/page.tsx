@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 import One from "./One";
 import Two from "./Two";
-import { handleApiError } from "@/lib/utils";
+import { cn, handleApiError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Plan } from "@/lib/types";
 import { usePlanStore } from "@/zustand/planStore";
@@ -24,6 +24,7 @@ const diets = {
   Gout: "low Purine",
   Artheroslerosis: "low Cholesterol",
 };
+
 export default function MealPlanner() {
   const { setMealPlan } = usePlanStore();
   const [loading, setLoading] = useState(false);
@@ -43,17 +44,21 @@ export default function MealPlanner() {
       (disease) => diets[disease as keyof typeof diets]
     );
 
-    const instruction = `fruits:${selectedFoods.fruits.join(
+    const instruction = `${
+      selectedFoods.fruits.length > 0 &&
+      "fruits:" + selectedFoods.fruits.join(",") + ","
+    } ${
+      selectedFoods.foods.length > 0 &&
+      " foods:" + selectedFoods.foods.join(",") + ","
+    } ${
+      selectedFoods.vegetables.length > 0 &&
+      " vegetables:" + selectedFoods.vegetables.join(",") + ","
+    } ${
+      preference.disease.length > 0 &&
+      " for a patient with" + preference.disease.join(",") + ","
+    } having a ${preference.diet.join(
       ","
-    )}, foods:${selectedFoods.foods.join(
-      ","
-    )}, vegetables:${selectedFoods.vegetables.join(
-      ","
-    )} for a patient with ${preference.disease.join(
-      ","
-    )} having a ${preference.diet.join(
-      ","
-    )} diet. Meals should follow ${dietArray.join(",")} diet`;
+    )} diet. Meals must follow a healthy ${dietArray.join(",")} diet`;
 
     setLoading(true);
     try {
@@ -71,12 +76,23 @@ export default function MealPlanner() {
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
-      const mealPlan: Plan[] = JSON.parse(cleanJson);
+      console.log(cleanJson);
+      // const startIndex = cleanJson.indexOf("[");
+      // const endIndex = cleanJson.lastIndexOf("]");
+      // let mealPlans = [];
 
-      console.log(mealPlan);
+      // if (startIndex !== -1 && endIndex !== -1) {
+      //   const jsonPart = cleanJson.substring(startIndex, endIndex + 1);
+      //   mealPlans = JSON.parse(jsonPart);
+      //   console.log(mealPlans);
+      // } else {
+      //   throw new Error("Valid JSON array not found in response");
+      // }
 
-      setMealPlan(mealPlan);
-      router.push("/plan");
+      // const mealPlan: Plan[] = mealPlans;
+
+      //setMealPlan(mealPlan);
+      // router.push("/plan");
     } catch (err) {
       console.error(err);
       handleApiError(err);

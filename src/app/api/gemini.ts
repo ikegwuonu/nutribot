@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 export async function POST(req: Request) {
   const { instructions } = await req.json();
 
@@ -34,5 +36,8 @@ export async function POST(req: Request) {
 
   const data = await response.json();
   const jsonOutput = data.choices?.[0]?.message?.content || "";
-  return jsonOutput;
+  //return jsonOutput;
+  return NextResponse.json(
+    data.choices?.[0]?.message?.content ?? "No response"
+  );
 }
