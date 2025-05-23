@@ -17,7 +17,7 @@ import Link from "next/link";
 const Page = () => {
   const { mealPlan, hasPlan } = usePlanStore();
   console.log("mealPlan", mealPlan);
-  console.log("hasPlan", hasPlan);
+
   return (
     <div className="space-y-8 mx-auto max-w-4xl z-10">
       {" "}

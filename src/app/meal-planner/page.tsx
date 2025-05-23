@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/navbar";
 import One from "./One";
 import Two from "./Two";
-import { cn, handleApiError } from "@/lib/utils";
+import { handleApiError } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Plan } from "@/lib/types";
 import { usePlanStore } from "@/zustand/planStore";
@@ -76,25 +76,11 @@ export default function MealPlanner() {
         .replace(/```json/g, "")
         .replace(/```/g, "")
         .trim();
-      console.log(cleanJson);
-      // const startIndex = cleanJson.indexOf("[");
-      // const endIndex = cleanJson.lastIndexOf("]");
-      // let mealPlans = [];
+      const mealPlan: Plan[] = JSON.parse(cleanJson);
 
-      // if (startIndex !== -1 && endIndex !== -1) {
-      //   const jsonPart = cleanJson.substring(startIndex, endIndex + 1);
-      //   mealPlans = JSON.parse(jsonPart);
-      //   console.log(mealPlans);
-      // } else {
-      //   throw new Error("Valid JSON array not found in response");
-      // }
-
-      // const mealPlan: Plan[] = mealPlans;
-
-      //setMealPlan(mealPlan);
-      // router.push("/plan");
+      setMealPlan(mealPlan);
+      router.push("/plan");
     } catch (err) {
-      console.error(err);
       handleApiError(err);
     } finally {
       setLoading(false);

@@ -33,7 +33,6 @@ export default function DetailedRecipe({
   nutritionInfo,
   detail,
 }: RecipeProps) {
-  console.log(instructions);
   const combined = instructions.join(" ");
   const splitSentences = combined
     .split(".")

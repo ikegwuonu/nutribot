@@ -35,8 +35,8 @@ export async function POST(req: Request) {
   });
 
   const data = await response.json();
-  const jsonOutput = data.choices?.[0]?.message?.content || "";
-  //return jsonOutput;
+  // const jsonOutput = data.choices?.[0]?.message?.content || "";
+
   return NextResponse.json(
     data.choices?.[0]?.message?.content ?? "No response"
   );
